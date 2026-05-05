@@ -30,11 +30,18 @@ def _clean():
 
 
 def _copy_web():
-    for name in ("index.html", "app.js", "style.css", "favicon.png"):
+    # index.html은 루트, 나머지는 /static/ 경로로 (FastAPI 마운트 호환)
+    shutil.copy2(WEB / "index.html", PUBLIC / "index.html")
+    static_dir = PUBLIC / "static"
+    static_dir.mkdir(parents=True, exist_ok=True)
+    for name in ("app.js", "style.css", "favicon.png", "apple-touch-icon.png"):
         src = WEB / name
         if src.exists():
-            shutil.copy2(src, PUBLIC / name)
-    print(f"[build] web assets → public/")
+            shutil.copy2(src, static_dir / name)
+    # favicon은 루트에도 (브라우저 자동 요청)
+    if (WEB / "favicon.png").exists():
+        shutil.copy2(WEB / "favicon.png", PUBLIC / "favicon.ico")
+    print(f"[build] web → public/index.html + public/static/")
 
 
 def _build_targets_json():
