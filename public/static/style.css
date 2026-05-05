@@ -27,6 +27,23 @@ body {
   z-index: 11;
 }
 
+#github-link {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  color: #c8c8d0;
+  text-decoration: none;
+  transition: color 0.15s, transform 0.15s;
+}
+
+#github-link:hover {
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.1);
+}
+
 #page-title {
   margin: 0;
   font-size: 20px;
