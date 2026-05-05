@@ -1,0 +1,45 @@
+flowchart TD
+    subgraph collect ["📥 1. 수집 & 큐레이션"]
+        A1[Bing/DuckDuckGo 크롤링<br/>collect.py] --> A2[perceptual hash 중복 제거]
+        A2 --> A3[InsightFace 정체성 필터<br/>identity_filter.py]
+        A3 -->|sim ≥ 0.35| A4[활성 타일 풀]
+        A3 -->|sim &lt; 0.35| A5[_rejected/]
+        A5 -.->|sim 0.30 완화| A6[rescue_color_tiles.py]
+        A6 --> A4
+    end
+
+    subgraph index ["📊 2. 인덱싱"]
+        A4 --> B1[색·얼굴·CLIP 분류<br/>classify.py]
+        B1 --> B2[(tiles_index.csv<br/>+ tiles_meta.json)]
+        B2 --> B3[얼굴 영역 LAB 갱신<br/>reindex_face_lab.py]
+        B3 --> B4[(최종 인덱스<br/>avg/face/q0~q3 LAB)]
+    end
+
+    subgraph mosaic ["🎨 3. 모자이크 생성"]
+        T[타겟 이미지<br/>targets/*.jpg] --> M1[셀별 색 매칭<br/>mosaic.py]
+        B4 --> M1
+        M1 -->|top-K=80<br/>chroma-weighted ΔE| M2[2×2 patch 정밀 매칭]
+        M2 -->|usage/neighbor penalty| M3[layout.json<br/>6,400 셀 80×80]
+        M3 --> M4[채점<br/>score.py]
+        M4 --> M5[SSIM 30 + 지각 25<br/>+ 색 15 + 다양성 10<br/>+ 인접 10 + 선명 5<br/>+ 식별 5]
+    end
+
+    subgraph deploy ["🚀 4. 배포"]
+        M3 --> D1[정적 빌드<br/>build_static.py]
+        D1 --> D2[public/ 디렉터리<br/>~93MB]
+        D2 --> D3[Vercel CDN]
+        D2 --> D4[FastAPI 서버<br/>server.py<br/>로컬 개발용]
+    end
+
+    subgraph runtime ["🌐 5. 런타임"]
+        D3 --> R1[브라우저]
+        D4 --> R1
+        R1 --> R2[타겟 클릭]
+        R2 --> R3[FLIP 애니메이션<br/>scatter → grid]
+        R3 --> R4[Canvas 합성<br/>blend 0.75]
+    end
+
+    style A4 fill:#2ec27e,color:#000
+    style B4 fill:#2ec27e,color:#000
+    style M3 fill:#6ad0ff,color:#000
+    style D3 fill:#000,color:#fff

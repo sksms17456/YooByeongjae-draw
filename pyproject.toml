@@ -1,0 +1,46 @@
+[project]
+name = "byunjae-leeds"
+version = "0.1.0"
+description = "Interactive photo mosaic generator for Yoo Byung Jae"
+requires-python = ">=3.11"
+dependencies = [
+    "icrawler>=0.6.7",
+    "pillow>=10.0.0",
+    "numpy>=1.26.0",
+    "opencv-python>=4.9.0",
+    "scikit-image>=0.22.0",
+    "imagehash>=4.3.1",
+    "mediapipe>=0.10.9",
+    "open-clip-torch>=2.24.0",
+    "torch>=2.2.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.27.0",
+    "tqdm>=4.66.0",
+    "matplotlib>=3.8.0",
+    "yt-dlp>=2026.3.17",
+    "insightface>=0.7.3",
+    "onnxruntime>=1.25.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",
+]
+lpips = [
+    "lpips>=0.1.4",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]
+
+[dependency-groups]
+dev = [
+    "playwright>=1.59.0",
+    "pytest>=9.0.3",
+]

@@ -1,0 +1,26 @@
+# 대용량 데이터 (수백 MB ~ GB)
+tiles/
+output/
+.venv/
+
+# 파이프라인 파생물 (재생성 가능)
+index/
+
+# 격리된 타겟 (참고용 보관)
+targets/_*/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# OS
+.DS_Store
+
+# Vercel CLI 메타데이터 (배포 시 자동생성)
+.vercel/
+
+# 빌드 로그
+/tmp/*.log
+*.log
