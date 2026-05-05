@@ -1,13 +1,13 @@
-# 대용량 데이터 (수백 MB ~ GB)
-tiles/
-output/
-.venv/
+# 대용량 데이터 (수백 MB ~ GB) — 루트 한정 패턴으로 public/tiles_thumb/tiles/ 등 오매칭 방지
+/tiles/
+/output/
+/.venv/
 
 # 파이프라인 파생물 (재생성 가능)
-index/
+/index/
 
 # 격리된 타겟 (참고용 보관)
-targets/_*/
+/targets/_*/
 
 # Python
 __pycache__/
