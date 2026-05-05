@@ -117,18 +117,17 @@ def _copy_tile_assets(layouts_dir: Path):
     n_thumb, n_full = 0, 0
     for tile_path in sorted(used):
         # tile_path 예: "tiles/photoshoot/bing_xxx.jpg"
+        # 프론트는 /tiles_thumb/{tile_path} 형식으로 요청 (tiles/ 접두사 포함)
         rel = Path(tile_path).relative_to("tiles")
-        # thumb
         thumb_src = THUMBS_DIR / rel
         if thumb_src.exists():
-            dst = thumbs_dir / rel
+            dst = thumbs_dir / tile_path  # public/tiles_thumb/tiles/photoshoot/...
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(thumb_src, dst)
             n_thumb += 1
-        # full
         full_src = TILES_DIR / rel
         if full_src.exists():
-            dst = full_dir / rel
+            dst = full_dir / tile_path  # public/tiles_full/tiles/photoshoot/...
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(full_src, dst)
             n_full += 1
